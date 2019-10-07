@@ -1,8 +1,17 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-
+from phone_field import PhoneField
 # Create your models here.
+class Organisation(models.Model):
+	name = models.CharField(max_length=30)
+	address = models.TextField()
+	contact_no = PhoneField(blank=True, help_text = 'Contact phone number')
+	email = models.EmailField(blank=True)
+	labour_hours_per_month = models.PositiveSmallIntegerField()
+	def __str__(self):
+		return self.name
+
 class Income(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	value = models.FloatField()
@@ -13,7 +22,7 @@ class Income(models.Model):
 		('STOCKS', 'Return on investment in stocks'), 
 		('OTHERS', 'Others'),
 	]
-	source = models.CharField(max_lenght=20, choices=SOURCE_CHOICES)
+	source = models.CharField(max_length=20, choices=SOURCE_CHOICES)
 	date_received = models.DateTimeField(default=timezone.now)
 	is_taxed = models.BooleanField(default=False)
 	is_major = models.BooleanField(default=False)
@@ -22,18 +31,9 @@ class Income(models.Model):
 	def __str__(self):
 		return self.username
 
-class Orgaisation(models.Model):
-	name = CharField(max_length=30)
-	address = TextField()
-	contact_no = PhoneField(blank=True, help_text = 'Contact phone number')
-	email = EmailField()
-	labour_hours_per_month = SmallPositiveIntegerField()
-	def __str__(self):
-		return self.name
-
-class Savings():
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-	value = models.FloatField()
+class Savings(models.Model):
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	value = models.FloatField(default=0.0)
 	date_saved = models.DateTimeField(default=timezone.now)
 	CATEGORY_CHOICES=[
 		('INSURANCE', 'To insurance provider'), 
@@ -42,17 +42,23 @@ class Savings():
 		('INVESTMENT', 'Investment'), 
 		('OTHERS', 'Others'),
 	]
-	category = models.CharField(max_length=30, choice=CATEGORY_CHOICES)
-	comments = TextField()
+	category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
+	comments = models.TextField()
+	class Meta:
+		verbose_name_plural = "Savings"
+	def __str__(self):
+		return self.value
 
-class Expenditure():
+class Expenditure(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	value = models.FoatField()
+	value = models.FloatField(default=0.0)
 	date_spent = models.DateTimeField(default=timezone.now)
 	CATEGORY_CHOICES=[
 		('NECESSITY', 'Necessity'), 
 		('LEISURE', 'Leisure'), 
 		('OTHERS', 'Others'), 
 	]
-	category = models.CharField()
+	category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
 	comments = models.TextField()
+	def __str__(self):
+		return self.value
