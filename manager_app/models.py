@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from phone_field import PhoneField
 # Create your models here.
+
 class Organisation(models.Model):
 	name = models.CharField(max_length=30)
 	address = models.TextField()
@@ -29,7 +30,8 @@ class Income(models.Model):
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)
 	comments = models.TextField()
 	def __str__(self):
-		return self.username
+		return self.user.username+str(self.date_received)
+
 
 class Savings(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -47,7 +49,8 @@ class Savings(models.Model):
 	class Meta:
 		verbose_name_plural = "Savings"
 	def __str__(self):
-		return self.value
+		return self.user.username+str(self.date_saved)
+
 
 class Expenditure(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -61,4 +64,4 @@ class Expenditure(models.Model):
 	category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
 	comments = models.TextField()
 	def __str__(self):
-		return self.value
+		return self.user.username+str(self.date_spent)
