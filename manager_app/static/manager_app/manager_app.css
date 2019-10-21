@@ -1,0 +1,59 @@
+.page-header {
+    background-color: #191970;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 26pt;
+    text-decoration: none;
+	/*position: absolute;
+	text-align: right;*/
+}
+.page-header h4 {
+	color: #828282
+}
+.content {
+    margin-left: 40px;
+}
+
+h1, h2, h3, {
+    font-family: 'Lobster', cursive;
+}
+
+.date {
+    color: #828282;
+}
+
+.save {
+    float: right;
+}
+
+.post-form textarea, .post-form input {
+    width: 100%;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 16pt;
+    margin-right: 20px;
+	position: relative;
+	display: block;
+	top: 10px
+	right: 40px
+}
+
+.question {
+    margin-bottom: 20px;
+	color: #ff750A
+}
+
+.body {
+    padding-left: 15px;
+}
+
+.question h2 a, .question h2 a:visited {
+    color: #ff750A;
+}
