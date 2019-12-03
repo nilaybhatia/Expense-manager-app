@@ -5,5 +5,9 @@
     <a class="btn btn-default" href="{% url 'something_new' something='income' %}" class="top-menu">Add new income<span class="glyphicon glyphicon-plus"></span></a>
     <a class="btn btn-default" href="{% url 'something_new' something='savings' %}" class="top-menu">Add new savings<span class="glyphicon glyphicon-plus"></span></a>
     <a class="btn btn-default" href="{% url 'something_new' something='expenditure' %}" class="top-menu">Add new expenditure<span class="glyphicon glyphicon-plus"></span></a>
+    <br> <br>
+    <a class="btn btn-default" href="{% url 'view_something' something='income' %}" class="top-menu">View my income<span class="glyphicon glyphicon-eye-open"></span></a>
+    <a class="btn btn-default" href="{% url 'view_something' something='savings' %}" class="top-menu">View my savings<span class="glyphicon glyphicon-eye-open"></span></a>
+    <a class="btn btn-default" href="{% url 'view_something' something='expenditure' %}" class="top-menu">View my expenditure<span class="glyphicon glyphicon-eye-open"></span></a>    
     <h5><a href="{% url 'logout' %}">Logout</a></h3>
 {% endblock %}

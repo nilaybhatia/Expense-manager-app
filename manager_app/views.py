@@ -24,6 +24,7 @@ def signup(request):
     return render(request, 'manager_app/signup.html', {'form': form})
 
 #something can be income, savings, or expenditure
+#view for adding an income, savings or expenditure
 def something_new(request, something):
     options = {
             'income' : IncomeForm(request.POST),
@@ -41,3 +42,11 @@ def something_new(request, something):
         form = options[something]
         return render(request, 'manager_app/something_edit.html', {'form': form, 'something': something})
 
+def view_something(request, something):
+    options = {
+        'income' : Income.objects.all().order_by('-date_received'),
+        'savings' : Savings.objects.all().order_by('-date_saved'),
+        'expenditure' : Expenditure.objects.all().order_by('-date_spent'),
+    }
+    that_things = options[something] #eg. incomes = Income.objects.all()...
+    return render(request, 'manager_app/view_' + something + '.html', {'that_things' : that_things})

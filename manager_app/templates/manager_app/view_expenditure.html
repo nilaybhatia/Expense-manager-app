@@ -1,0 +1,40 @@
+{% extends 'manager_app/base.html' %}
+{% block content %}
+
+    <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        th {
+            background-color: coral
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+        </style>
+        
+    <table>
+        <tr>
+            <th align="left" scope = "col">Value</th>
+            <th align="left" scope = "col">Category</th>
+            <th align="left" scope = "col">Date spent</th>
+            <th align="left" scope = "col">Comments</th>
+        </tr>
+        {% for expenditure in that_things %}
+                <tr>	
+                    <td>{{expenditure.value}}</td>
+                    <td> {{expenditure.category}}</td>
+                    <td> {{expenditure.date_spent}}</td>
+                    <td>{{expenditure.comments}}</td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'manager_app/base.html' %}
+{% block content %}
+
+    <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        th {
+            background-color: coral
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+        </style>
+        
+    <table>
+        <tr>
+            <th align="left" scope = "col">Value</th>
+            <th align="left" scope = "col">Category</th>
+            <th align="left" scope = "col">Date saved</th>
+            <th align="left" scope = "col">Comments</th>
+        </tr>
+        {% for savings in that_things %}
+                <tr>	
+                    <td>{{savings.value}}</td>
+                    <td> {{savings.category}}</td>
+                    <td>{{savings.date_saved}}</td>
+                    <td>{{savings.comments}}</td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'manager_app/base.html' %}
+{% block content %}
+
+    <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        th {
+            background-color: coral
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+        </style>
+        
+    <table>
+        <tr>
+            <th align="left" scope = "col">Value</th>
+            <th align="left" scope = "col">Source</th>
+            <th align="left" scope = "col">Date received</th>
+            <th align="left" scope = "col">Major?</th>
+            <th align="left" scope = "col">Taxed?</th>
+            <th align="left" scope = "col">Organisation</th>
+            <th align="left" scope = "col">Comments</th>
+        </tr>
+        {% for income in that_things %}
+                <tr>	
+                    <td>{{income.value}}</td>
+                    <td> {{income.source}}</td>
+                    <td>{{income.date_received}}</td>
+                    <td>{{income.is_major}}</td>
+                    <td>{{income.is_taxed}}</td>
+                    <td>{{income.organisation}}</td>
+                    <td>{{income.comments}}</td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
