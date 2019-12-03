@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .forms import SignUpForm
+from .forms import *
 from django.contrib.auth import login, logout
 # Create your views here.
 
 def home(request):
     return render(request, 'manager_app/home.html')
+
 def profile(request):
     return render(request, 'manager_app/profile.html')
 
@@ -21,3 +22,22 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'manager_app/signup.html', {'form': form})
+
+#something can be income, savings, or expenditure
+def something_new(request, something):
+    options = {
+            'income' : IncomeForm(request.POST),
+            'savings' : SavingsForm(request.POST),
+            'expenditure' : ExpenditureForm(request.POST),
+    }
+    if request.method == "POST":
+        form = options[something]
+        if form.is_valid():
+            that_thing = form.save(commit=False) #eg. income = form.save()
+            that_thing.user = request.user
+            that_thing.save()
+            return redirect(something + '_list', pk=that_thing.pk)
+    else:
+        form = options[something]
+        return render(request, 'manager_app/something_edit.html', {'form': form, 'something': something})
+

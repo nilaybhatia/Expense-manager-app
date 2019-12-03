@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "c:\\Users\\Nilay\\Documents\\Learning-Phase-tasks\\winenv\\Scripts\\python.exe",
+    "python.pythonPath": "winenv\\Scripts\\python.exe",
     "files.exclude": {
         "**/.classpath": true,
         "**/.project": true,

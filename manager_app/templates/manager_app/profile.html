@@ -2,5 +2,8 @@
 
 {% block content %}
     <h2>Welcome to your dashboard, {{ user.username }}</h2>
+    <a class="btn btn-default" href="{% url 'something_new' something='income' %}" class="top-menu">Add new income<span class="glyphicon glyphicon-plus"></span></a>
+    <a class="btn btn-default" href="{% url 'something_new' something='savings' %}" class="top-menu">Add new savings<span class="glyphicon glyphicon-plus"></span></a>
+    <a class="btn btn-default" href="{% url 'something_new' something='expenditure' %}" class="top-menu">Add new expenditure<span class="glyphicon glyphicon-plus"></span></a>
     <h5><a href="{% url 'logout' %}">Logout</a></h3>
 {% endblock %}

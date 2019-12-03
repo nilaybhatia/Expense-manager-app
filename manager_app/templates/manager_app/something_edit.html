@@ -1,0 +1,9 @@
+{% extends 'manager_app/base.html' %}
+
+{% block content %}
+    <h2>New {{ something }}</h2>
+    <form method="POST" class="something-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}
