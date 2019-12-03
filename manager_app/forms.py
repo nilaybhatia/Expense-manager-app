@@ -10,7 +10,7 @@ class SignUpForm(forms.ModelForm):
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
-        exclude = ['user', 'date_received']
+        exclude = ['user']
 
 class SavingsForm(forms.ModelForm):
     class Meta:

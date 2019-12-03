@@ -37,7 +37,7 @@ def something_new(request, something):
             that_thing = form.save(commit=False) #eg. income = form.save()
             that_thing.user = request.user
             that_thing.save()
-            return redirect(something + '_list', pk=that_thing.pk)
+            return redirect('view_something', something = something)
     else:
         form = options[something]
         return render(request, 'manager_app/something_edit.html', {'form': form, 'something': something})
