@@ -7,8 +7,13 @@ from django.contrib.auth import login, logout
 def home(request):
     return render(request, 'manager_app/home.html')
 
+def calculate_balance(request):
+    total_income = sum(income.value for income in Income.objects.filter(user = request.user))
+    total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
+    total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
+    return total_income-total_expenditure-total_savings
 def profile(request):
-    return render(request, 'manager_app/profile.html')
+    return render(request, 'manager_app/profile.html', {'balance' : calculate_balance(request)})
 
 def signup(request):
     if request.method == "POST":
@@ -44,9 +49,13 @@ def something_new(request, something):
 
 def view_something(request, something):
     options = {
-        'income' : Income.objects.all().order_by('-date_received'),
-        'savings' : Savings.objects.all().order_by('-date_saved'),
-        'expenditure' : Expenditure.objects.all().order_by('-date_spent'),
+        'income' : Income.objects.filter(user = request.user).order_by('-date_received'),
+        'savings' : Savings.objects.filter(user = request.user).order_by('-date_saved'),
+        'expenditure' : Expenditure.objects.filter(user = request.user).order_by('-date_spent'),
     }
     that_things = options[something] #eg. incomes = Income.objects.all()...
-    return render(request, 'manager_app/view_' + something + '.html', {'that_things' : that_things})
+    total = 0
+    for that_thing in that_things:
+        total += that_thing.value
+    total_income = sum(income.value for income in Income.objects.filter(user = request.user))
+    return render(request, 'manager_app/view_' + something + '.html', {'that_things' : that_things, 'total' : total})
