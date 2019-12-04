@@ -7,9 +7,12 @@
         <button type="submit" class="save btn btn-default">Save</button>
         <script type="text/javascript"> 
             $(function(){
-              $("#id_date_received").datepicker();
+              $("[id*='id_date']").datepicker();
+              /*
+                any id matching 'date' as substring can be selected; so works for 'date_received, date_spent, etc
+                https://stackoverflow.com/questions/8126218/how-do-you-select-all-id-tags-that-contain-a-certain-string-in-javascript'
+              */
             });
           </script>
     </form>
-    
 {% endblock %}
