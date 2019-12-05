@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .forms import *
 from django.contrib.auth import login, logout
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import *
 # Create your views here.
 
 def home(request):
@@ -11,7 +13,21 @@ def calculate_balance(request):
     total_income = sum(income.value for income in Income.objects.filter(user = request.user))
     total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
     total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
-    return total_income-total_expenditure-total_savings
+    balance = total_income-total_expenditure-total_savings
+    if(balance <= 1000000000):
+        msg = """
+            Hi %s,
+            Your account savings are Rs %.2f, which is less than 30%% of the balance amount(Rs. %.2f). 
+            Kindly take necessary steps.
+            """ % (request.user, total_savings, balance,)
+        send_mail(
+            'Your expense manager app: Account is low on savings',
+            msg,
+            "example@gmail.com",
+            [request.user.email],
+            fail_silently=False,
+        )
+    return balance
 def profile(request):
     return render(request, 'manager_app/profile.html', {'balance' : calculate_balance(request)})
 
