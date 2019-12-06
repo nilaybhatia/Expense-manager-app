@@ -14,7 +14,7 @@ def calculate_balance(request):
     total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
     total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
     balance = total_income-total_expenditure-total_savings
-    if(balance <= 1000000000):
+    if(total_savings < 0.3*balance): #mail them about low savings
         msg = """
             Hi %s,
             Your account savings are Rs %.2f, which is less than 30%% of the balance amount(Rs. %.2f). 
@@ -23,7 +23,7 @@ def calculate_balance(request):
         send_mail(
             'Your expense manager app: Account is low on savings',
             msg,
-            "example@gmail.com",
+            "djscecomputers@gmail.com",
             [request.user.email],
             fail_silently=False,
         )
@@ -63,6 +63,7 @@ def something_new(request, something):
         form = options[something]
         return render(request, 'manager_app/something_edit.html', {'form': form, 'something': something})
 
+#view for viewing income, savings, etc
 def view_something(request, something):
     options = {
         'income' : Income.objects.filter(user = request.user).order_by('-date_received'),
@@ -75,3 +76,31 @@ def view_something(request, something):
         total += that_thing.value
     total_income = sum(income.value for income in Income.objects.filter(user = request.user))
     return render(request, 'manager_app/view_' + something + '.html', {'that_things' : that_things, 'total' : total})
+
+#for clearing this month's figures and fresh start for new month
+def clear_figures(request):
+    total_income = sum(income.value for income in Income.objects.filter(user = request.user))
+    total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
+    total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
+    balance = total_income-total_expenditure-total_savings
+    msg = """
+            Hi %s,
+            Your account summary
+            Income : %.2f
+            Savings : %.2f
+            Expendture : %.2f
+            Balance : %.2f
+            Sincerely,
+            Your app manager
+            """ % (request.user, total_income, total_savings, total_expenditure, balance)
+    send_mail(
+        'Your expense manager app: The month in review',
+        msg,
+        "djscecomputers@gmail.com",
+        [request.user.email],
+        fail_silently=False,
+    )
+    Income.objects.filter(user = request.user).delete()
+    Savings.objects.filter(user = request.user).delete()
+    Expenditure.objects.filter(user = request.user).delete()
+    return redirect('profile')

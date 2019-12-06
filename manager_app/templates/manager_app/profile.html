@@ -9,6 +9,7 @@
     <br> <br>
     <a class="btn btn-default" href="{% url 'view_something' something='income' %}" class="top-menu">View my income<span class="glyphicon glyphicon-eye-open"></span></a>
     <a class="btn btn-default" href="{% url 'view_something' something='savings' %}" class="top-menu">View my savings<span class="glyphicon glyphicon-eye-open"></span></a>
-    <a class="btn btn-default" href="{% url 'view_something' something='expenditure' %}" class="top-menu">View my expenditure<span class="glyphicon glyphicon-eye-open"></span></a>    
+    <a class="btn btn-default" href="{% url 'view_something' something='expenditure' %}" class="top-menu">View my expenditure<span class="glyphicon glyphicon-eye-open"></span></a> 
+    <a class="btn btn-default" href="{% url 'clear_figures' %}" class="top-menu">Clear figures for the month and mail them to me<span class="glyphicon glyphicon-erase"></span></a>
     <h5><a href="{% url 'logout' %}">Logout</a></h3>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from phone_field import PhoneField
+from django.core.validators import MinValueValidator
 # Create your models here.
 
 class Organisation(models.Model):
@@ -15,7 +16,7 @@ class Organisation(models.Model):
 
 class Income(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	value = models.FloatField()
+	value = models.FloatField(validators=[MinValueValidator(1.0)])
 	SOURCE_CHOICES=[
 		('JOB', 'From Job salary'), 
 		('RENT', 'From house rent'), 
@@ -35,7 +36,7 @@ class Income(models.Model):
 
 class Savings(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	value = models.FloatField(default=0.0)
+	value = models.FloatField(validators=[MinValueValidator(1.0)])
 	date_saved = models.DateField(default=timezone.now)
 	CATEGORY_CHOICES=[
 		('INSURANCE', 'To insurance provider'), 
@@ -54,7 +55,7 @@ class Savings(models.Model):
 
 class Expenditure(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	value = models.FloatField(default=0.0)
+	value = models.FloatField(validators=[MinValueValidator(1.0)])
 	date_spent = models.DateField(default=timezone.now)
 	CATEGORY_CHOICES=[
 		('NECESSITY', 'Necessity'), 
