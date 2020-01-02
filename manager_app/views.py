@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import *
 import matplotlib.pyplot as plt
+import threading
 # Create your views here.
 
 def home(request):
@@ -103,7 +104,11 @@ def view_something(request, something):
         'org' : Organisation.objects.all()
     }
     that_things = options[something] #eg. incomes = Income.objects.all()...
-    generate_plot(request, something)
+    #generate_plot(request, something)
+    t = threading.Thread(target=generate_plot, args=[request, something])
+    # We want the program to wait on this thread before shutting down.
+    t.setDaemon(False)
+    t.start()
     total = 0
     if(something != 'org'):
         for that_thing in that_things:
