@@ -52,8 +52,8 @@ def generate_plot(request, something):
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
 
     plt.axis('equal')
+    plt.savefig('images_for_mail/' + something + '.png')
     plt.show()
-    #plt.savefig('books_read.png')
         
 
 
