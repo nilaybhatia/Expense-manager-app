@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import *
+import matplotlib.pyplot as plt
 # Create your views here.
 
 def home(request):
@@ -28,6 +29,35 @@ def calculate_balance(request):
             fail_silently=False,
         )
     return balance
+
+def generate_plot(request, something):
+    sizes = []
+    colors_set = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'blue']
+    if(something == 'income'):
+        labels = [choice[0] for choice in Income.SOURCE_CHOICES]
+        for label in labels:
+            sizes.append(sum(income.value for income in Income.objects.filter(user = request.user, source = label)))
+    elif(something == 'savings'):
+        labels = [choice[0] for choice in Savings.CATEGORY_CHOICES]
+        for label in labels:
+            sizes.append(sum(savings.value for savings in Savings.objects.filter(user = request.user, category = label)))
+    elif(something == 'expenditure'):
+        labels = [choice[0] for choice in Expenditure.CATEGORY_CHOICES]
+        for label in labels:
+            sizes.append(sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user, category = label)))
+    colors = colors_set[0:len(sizes)]
+
+    #Plot
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+
+    plt.axis('equal')
+    plt.show()
+    #plt.savefig('books_read.png')
+        
+
+
+
+
 def profile(request):
     return render(request, 'manager_app/profile.html', {'balance' : calculate_balance(request)})
 
@@ -51,6 +81,7 @@ def something_new(request, something):
             'income' : IncomeForm(request.POST),
             'savings' : SavingsForm(request.POST),
             'expenditure' : ExpenditureForm(request.POST),
+            'org' : OrganisationForm(request.POST),
     }
     if request.method == "POST":
         form = options[something]
@@ -69,12 +100,14 @@ def view_something(request, something):
         'income' : Income.objects.filter(user = request.user).order_by('-date_received'),
         'savings' : Savings.objects.filter(user = request.user).order_by('-date_saved'),
         'expenditure' : Expenditure.objects.filter(user = request.user).order_by('-date_spent'),
+        'org' : Organisation.objects.all()
     }
     that_things = options[something] #eg. incomes = Income.objects.all()...
+    generate_plot(request, something)
     total = 0
-    for that_thing in that_things:
-        total += that_thing.value
-    total_income = sum(income.value for income in Income.objects.filter(user = request.user))
+    if(something != 'org'):
+        for that_thing in that_things:
+            total += that_thing.value
     return render(request, 'manager_app/view_' + something + '.html', {'that_things' : that_things, 'total' : total})
 
 #for clearing this month's figures and fresh start for new month
@@ -91,7 +124,7 @@ def clear_figures(request):
             Expendture : %.2f
             Balance : %.2f
             Sincerely,
-            Your app manager
+            Your expense manager app
             """ % (request.user, total_income, total_savings, total_expenditure, balance)
     send_mail(
         'Your expense manager app: The month in review',

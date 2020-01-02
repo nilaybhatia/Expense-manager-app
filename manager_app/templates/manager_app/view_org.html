@@ -1,0 +1,41 @@
+{% extends 'manager_app/base.html' %}
+{% block content %}
+
+    <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        th {
+            background-color: coral
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+    </style>
+    <table>
+        <tr>
+            <th align="left" scope = "col">Name</th>
+            <th align="left" scope = "col">Address</th>
+            <th align="left" scope = "col">Contact no.</th>
+            <th align="left" scope = "col">E-mail</th>
+            <th align="left" scope = "col">Labour hours per month</th>
+        </tr>
+        {% for org in that_things %}
+                <tr>	
+                    <td>{{org.name}}</td>
+                    <td> {{org.address}}</td>
+                    <td>{{org.contact_no}}</td>
+                    <td>{{org.email}}</td>
+                    <td>{{org.labour_hours_per_month}}</td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

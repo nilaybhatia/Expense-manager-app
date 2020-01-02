@@ -33,6 +33,7 @@
             <th align="left" scope = "col">Comments</th>
         </tr>
         {% for income in that_things %}
+            <div class="income">
                 <tr>	
                     <td>{{income.value}}</td>
                     <td> {{income.source}}</td>
@@ -42,6 +43,7 @@
                     <td>{{income.organisation}}</td>
                     <td>{{income.comments}}</td>
                 </tr>
+            </div>
         {% endfor %}
     </table>
 {% endblock %}

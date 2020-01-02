@@ -5,7 +5,7 @@
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
-    color: #ffffff;
+    color: #ff750A;
     font-size: 26pt;
     text-decoration: none;
 	/*position: absolute;
@@ -18,7 +18,7 @@
     margin-left: 40px;
 }
 
-h1, h2, h3, {
+h1, h2, h3 {
     font-family: 'Lobster', cursive;
 }
 
@@ -41,11 +41,11 @@ h1, h2, h3, {
     margin-right: 20px;
 	position: relative;
 	display: block;
-	top: 10px
-	right: 40px
+	top: 10px;
+	right: 40px;
 }
 
-.question {
+.income {
     margin-bottom: 20px;
 	color: #ff750A
 }
@@ -54,6 +54,6 @@ h1, h2, h3, {
     padding-left: 15px;
 }
 
-.question h2 a, .question h2 a:visited {
+.income h2 a, .income h2 a:visited {
     color: #ff750A;
 }

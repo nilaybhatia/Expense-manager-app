@@ -22,6 +22,11 @@ class ExpenditureForm(forms.ModelForm):
         model = Expenditure
         exclude = ['user']
 
+class OrganisationForm(forms.ModelForm):
+    class Meta:
+        model = Organisation
+        exclude = ['user']
+
 
 
 
