@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth import login, logout
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
 from .forms import *
 import matplotlib.pyplot as plt
@@ -22,13 +22,15 @@ def calculate_balance(request):
             Your account savings are Rs %.2f, which is less than 30%% of the balance amount(Rs. %.2f). 
             Kindly take necessary steps.
             """ % (request.user, total_savings, balance,)
-        send_mail(
+        email = EmailMessage(
             'Your expense manager app: Account is low on savings',
             msg,
             "djscecomputers@gmail.com",
             [request.user.email],
-            fail_silently=False,
+            reply_to=['bhatianilay@gmail.com'],
         )
+        email.attach_file('images_for_mail/savings.png')
+        email.send()
     return balance
 
 def generate_plot(request, something):
@@ -131,13 +133,17 @@ def clear_figures(request):
             Sincerely,
             Your expense manager app
             """ % (request.user, total_income, total_savings, total_expenditure, balance)
-    send_mail(
+    email = EmailMessage(
         'Your expense manager app: The month in review',
         msg,
         "djscecomputers@gmail.com",
         [request.user.email],
-        fail_silently=False,
+        reply_to=['bhatianilay@gmail.com'],
     )
+    email.attach_file('images_for_mail/income.png')
+    email.attach_file('images_for_mail/savings.png')
+    email.attach_file('images_for_mail/expenditure.png')
+    email.send()
     Income.objects.filter(user = request.user).delete()
     Savings.objects.filter(user = request.user).delete()
     Expenditure.objects.filter(user = request.user).delete()
