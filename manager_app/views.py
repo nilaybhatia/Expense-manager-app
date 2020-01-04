@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth import login, logout
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from .forms import *
 import matplotlib.pyplot as plt
 import threading
+from django.template.loader import get_template
+from django.template import Context
 # Create your views here.
 
 def home(request):
@@ -16,20 +18,25 @@ def calculate_balance(request):
     total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
     total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
     balance = total_income-total_expenditure-total_savings
-    if(total_savings < 0.3*balance): #mail them about low savings
+    if(True): #total_savings < 0.3*balance): #mail them about low savings
         msg = """
             Hi %s,
             Your account savings are Rs %.2f, which is less than 30%% of the balance amount(Rs. %.2f). 
             Kindly take necessary steps.
             """ % (request.user, total_savings, balance,)
-        email = EmailMessage(
+        htmly = get_template('manager_app/hero.html')
+        #html_content = htmly.render()
+        email = EmailMultiAlternatives(
             'Your expense manager app: Account is low on savings',
             msg,
             "djscecomputers@gmail.com",
             [request.user.email],
             reply_to=['bhatianilay@gmail.com'],
         )
-        email.attach_file('images_for_mail/savings.png')
+        #username = Context({'username' : request.user})
+        html_content = htmly.render({'username' : request.user, 'savings' : total_savings, 'balance' : balance})
+        email.attach_alternative(html_content, "text/html")
+        email.attach_file('manager_app/static/manager_app/savings.png')
         email.send()
     return balance
 

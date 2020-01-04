@@ -1,14 +1,9 @@
-<html>
-    <head>
-        <title>Expense Manager</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="/">Welcome to your expense manager app</a></h1>
-        </div>
+{% extends 'manager_app/base.html' %}
 
-        <div>
-            <h3><a href="{% url 'login' %}">Login</a></h3>
-            <h3><a href="{% url 'signup' %}">Sign-up</a></h3>
-    </body>
-</html>
+{% block content %}
+    <div>
+        <h3><a href="{% url 'login' %}">Login</a></h3>
+        <h3><a href="{% url 'signup' %}">Sign-up</a></h3>
+    </div>
+
+{% endblock %}
