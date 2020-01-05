@@ -1,13 +1,17 @@
-from django.shortcuts import render, redirect
-from django.utils import timezone
+import os
+import threading
+from email.mime.image import MIMEImage
+
+import matplotlib.pyplot as plt
+from django.conf import settings
 from django.contrib.auth import login, logout
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
-from .forms import *
-import matplotlib.pyplot as plt
-import threading
+from django.shortcuts import redirect, render
 from django.template.loader import get_template
-from django.template import Context
+from django.utils import timezone
+
+from .forms import *
+
 # Create your views here.
 
 def home(request):
@@ -18,14 +22,12 @@ def calculate_balance(request):
     total_savings = sum(savings.value for savings in Savings.objects.filter(user = request.user))
     total_expenditure = sum(expenditure.value for expenditure in Expenditure.objects.filter(user = request.user))
     balance = total_income-total_expenditure-total_savings
-    if(True): #total_savings < 0.3*balance): #mail them about low savings
+    if(total_savings < 0.3*balance): #mail them about low savings
         msg = """
             Hi %s,
             Your account savings are Rs %.2f, which is less than 30%% of the balance amount(Rs. %.2f). 
             Kindly take necessary steps.
             """ % (request.user, total_savings, balance,)
-        htmly = get_template('manager_app/hero.html')
-        #html_content = htmly.render()
         email = EmailMultiAlternatives(
             'Your expense manager app: Account is low on savings',
             msg,
@@ -33,9 +35,18 @@ def calculate_balance(request):
             [request.user.email],
             reply_to=['bhatianilay@gmail.com'],
         )
-        #username = Context({'username' : request.user})
+        htmly = get_template('manager_app/low_savings.html')
         html_content = htmly.render({'username' : request.user, 'savings' : total_savings, 'balance' : balance})
         email.attach_alternative(html_content, "text/html")
+        email.mixed_subtype = 'related'
+
+        p = 'static/manager_app/'
+        for f in ['logo.png', 'savings.png']:
+            fp = open(os.path.join(os.path.dirname(__file__), p+f), 'rb')
+            msg_img = MIMEImage(fp.read())
+            fp.close()
+            msg_img.add_header('Content-ID', '<{}>'.format(f))
+            email.attach(msg_img)
         email.attach_file('manager_app/static/manager_app/savings.png')
         email.send()
     return balance
@@ -61,7 +72,7 @@ def generate_plot(request, something):
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
 
     plt.axis('equal')
-    plt.savefig('images_for_mail/' + something + '.png')
+    plt.savefig('manager_app/static/manager_app/' + something + '.png')
     plt.show()
         
 
@@ -140,16 +151,29 @@ def clear_figures(request):
             Sincerely,
             Your expense manager app
             """ % (request.user, total_income, total_savings, total_expenditure, balance)
-    email = EmailMessage(
+    email = EmailMultiAlternatives(
         'Your expense manager app: The month in review',
         msg,
         "djscecomputers@gmail.com",
         [request.user.email],
         reply_to=['bhatianilay@gmail.com'],
     )
-    email.attach_file('images_for_mail/income.png')
-    email.attach_file('images_for_mail/savings.png')
-    email.attach_file('images_for_mail/expenditure.png')
+    htmly = get_template('manager_app/monthly_report.html')
+    html_content = htmly.render({'username' : request.user, 'income' : total_income, 'savings' : total_savings, 'expenditure' : total_expenditure})
+    email.attach_alternative(html_content, 'text/html')
+    email.mixed_subtype = 'related'
+
+    p = 'static/manager_app/'
+    for f in ['logo.png', 'income.png', 'savings.png', 'expenditure.png']:
+        fp = open(os.path.join(os.path.dirname(__file__), p+f), 'rb')
+        msg_img = MIMEImage(fp.read())
+        fp.close()
+        msg_img.add_header('Content-ID', '<{}>'.format(f))
+        email.attach(msg_img)
+
+    email.attach_file('manager_app/static/manager_app/income.png')
+    email.attach_file('manager_app/static/manager_app/savings.png')
+    email.attach_file('manager_app/static/manager_app/expenditure.png')
     email.send()
     Income.objects.filter(user = request.user).delete()
     Savings.objects.filter(user = request.user).delete()

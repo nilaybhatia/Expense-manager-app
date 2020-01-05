@@ -23,8 +23,8 @@
 				<div class="content">
 					<table bgcolor="#999999">
 					<tr>
-						<td><img src="{% static 'manager_app/logo.png' %}" alt="Logo"></td>
-						<td align="right"><h6 class="collapse">For pros with deadlines</h6></td>
+						<td><img src="cid:logo.png" alt="Logo" height = 200 width = 450></td>
+						<td align="right"><h3 class="collapse">For pros with deadlines</h3></td>
 					</tr>
 				</table>
 				</div>
@@ -48,17 +48,17 @@
 						
 						<h3>Hello {{ username }}, </h3>
 						<p class="lead">Here is your monthly summary report. Have a look!</p>
-						<h4>Income:</h4>
+						<h4>Income: Rs.{{ income }}</h4>
 						<!-- Monthly income -->
-						<p><img src="manager_app/income.png" /></p>
+						<p><img src="cid:income.png"/></p>
 
-						<h4>Savings:</h4>
+						<h4>Savings: Rs.{{ savings }}</h4>
 						<!-- Monthly savings -->
-						<p><img src="manager_app/income.png" /></p>
+						<p><img src="cid:savings.png" /></p>
 
-						<h4>Expenditure:</h4>
+						<h4>Expenditure: Rs.{{ expenditure }}</h4>
 						<!-- Monthly expenditure -->
-						<p><img src="manager_app/income.png" /></p>
+						<p><img src="cid:expenditure.png" /></p>
 						
 						
 						<h3>Wish you a great financial month ahead</h3>
