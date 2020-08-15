@@ -25,7 +25,7 @@ class Income(models.Model):
 		('OTHERS', 'Others'),
 	]
 	source = models.CharField(max_length=20, choices=SOURCE_CHOICES)
-	date_received = models.DateField(default=timezone.now)
+	date_received = models.DateField(default=timezone.)
 	is_taxed = models.BooleanField(default=False)
 	is_major = models.BooleanField(default=False)
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)

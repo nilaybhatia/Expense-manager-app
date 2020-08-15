@@ -1,4 +1,7 @@
 Django==2.2.8
 django-phone-field
 matplotlib
+black
+djangorestframework
+
 

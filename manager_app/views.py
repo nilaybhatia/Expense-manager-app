@@ -179,3 +179,4 @@ def clear_figures(request):
     Savings.objects.filter(user = request.user).delete()
     Expenditure.objects.filter(user = request.user).delete()
     return redirect('profile')
+
